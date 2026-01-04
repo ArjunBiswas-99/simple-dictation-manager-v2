@@ -70,8 +70,50 @@ export class TypingMode {
         // Trigger transliteration on space or punctuation
         if (e.key === ' ' || e.key === '.' || e.key === ',' || e.key === '!' || e.key === '?') {
             if (this.currentLanguage === 'hi' || this.currentLanguage === 'bn') {
-                await this.processTransliteration();
+                e.preventDefault(); // Prevent default to control the space insertion
+                await this.processTransliterationOnSpace();
             }
+        }
+    }
+
+    /**
+     * Process transliteration when space is pressed
+     */
+    async processTransliterationOnSpace() {
+        const text = this.textEditor.getText();
+        
+        // Get the last word before cursor
+        const words = text.trim().split(/\s+/);
+        const lastWord = words[words.length - 1];
+
+        if (!lastWord || !lastWord.trim() || !/[a-zA-Z]+/.test(lastWord)) {
+            // No valid word to transliterate, just add space
+            this.textEditor.insertText(' ');
+            return;
+        }
+
+        console.log('Transliterating:', lastWord); // Debug log
+
+        try {
+            const transliterated = await this.transliteration.transliterate(
+                lastWord,
+                this.currentLanguage
+            );
+
+            console.log('Result:', transliterated); // Debug log
+
+            if (transliterated && transliterated !== lastWord) {
+                // Replace the last word with transliterated version
+                this.replaceLastWord(transliterated);
+            }
+
+            // Add the space after transliteration
+            this.textEditor.insertText(' ');
+
+        } catch (error) {
+            console.error('Transliteration error:', error);
+            // On error, just add the space
+            this.textEditor.insertText(' ');
         }
     }
 
@@ -136,17 +178,31 @@ export class TypingMode {
      */
     replaceLastWord(newWord) {
         const text = this.textEditor.getText();
-        const words = text.split(/\s+/);
+        const words = text.trim().split(/\s+/);
         
         if (words.length > 0) {
+            // Replace last word
             words[words.length - 1] = newWord;
             const newText = words.join(' ');
             
-            // Clear and insert new text
+            // Update editor content
             this.textEditor.editor.textContent = newText;
             
             // Move cursor to end
-            this.textEditor.focus();
+            const range = document.createRange();
+            const selection = window.getSelection();
+            
+            if (this.textEditor.editor.childNodes.length > 0) {
+                const lastNode = this.textEditor.editor.childNodes[this.textEditor.editor.childNodes.length - 1];
+                range.setStartAfter(lastNode);
+                range.setEndAfter(lastNode);
+            } else {
+                range.selectNodeContents(this.textEditor.editor);
+                range.collapse(false);
+            }
+            
+            selection.removeAllRanges();
+            selection.addRange(range);
         }
     }
 
