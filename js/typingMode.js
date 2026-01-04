@@ -70,65 +70,79 @@ export class TypingMode {
     }
 
     /**
-     * Handle keydown events for transliteration trigger
+     * Handle keydown events
      * @param {KeyboardEvent} e - Keyboard event
      */
     async onKeyDown(e) {
-        console.log('[TypingMode] Key pressed:', e.key, 'Language:', this.currentLanguage);
+        // Remove dotted underlines on any keypress
+        this.removeConvertedUnderlines();
+    }
+
+    /**
+     * Convert selected text using transliteration
+     */
+    async convertSelectedText() {
+        const editor = document.getElementById('editor');
+        const selection = window.getSelection();
         
-        // Trigger transliteration on space or punctuation
-        if (e.key === ' ' || e.key === '.' || e.key === ',' || e.key === '!' || e.key === '?') {
-            console.log('[TypingMode] Trigger key detected');
-            
-            if (this.currentLanguage === 'hi' || this.currentLanguage === 'bn') {
-                console.log('[TypingMode] Language requires transliteration, preventing default');
-                e.preventDefault(); // Prevent default to control the space insertion
-                await this.processTransliterationOnSpace();
-            } else {
-                console.log('[TypingMode] Language does not require transliteration');
+        if (!selection.rangeCount || selection.isCollapsed) {
+            alert('Please select text to convert');
+            return;
+        }
+
+        const range = selection.getRangeAt(0);
+        const selectedText = range.toString();
+
+        if (!selectedText.trim()) {
+            alert('Please select text to convert');
+            return;
+        }
+
+        console.log('[TypingMode] Converting selected text:', selectedText);
+
+        try {
+            const transliterated = await this.transliteration.transliterate(
+                selectedText,
+                this.currentLanguage
+            );
+
+            console.log('[TypingMode] Transliteration result:', transliterated);
+
+            if (transliterated && transliterated !== selectedText) {
+                // Create a span with dotted underline for the converted text
+                const span = document.createElement('span');
+                span.className = 'converted-text';
+                span.textContent = transliterated;
+                
+                // Replace the selection with the span
+                range.deleteContents();
+                range.insertNode(span);
+                
+                // Move cursor after the span
+                range.setStartAfter(span);
+                range.setEndAfter(span);
+                selection.removeAllRanges();
+                selection.addRange(range);
+                
+                console.log('[TypingMode] Text converted and underlined');
             }
+
+        } catch (error) {
+            console.error('[TypingMode] Conversion error:', error);
+            alert('Conversion failed. Please try again.');
         }
     }
 
     /**
-     * Process transliteration when space is pressed
+     * Remove dotted underlines from converted text
      */
-    async processTransliterationOnSpace() {
-        const text = this.textEditor.getText();
-        
-        // Get the last word before cursor
-        const words = text.trim().split(/\s+/);
-        const lastWord = words[words.length - 1];
-
-        if (!lastWord || !lastWord.trim() || !/[a-zA-Z]+/.test(lastWord)) {
-            // No valid word to transliterate, just add space
-            this.textEditor.insertText(' ');
-            return;
-        }
-
-        console.log('Transliterating:', lastWord); // Debug log
-
-        try {
-            const transliterated = await this.transliteration.transliterate(
-                lastWord,
-                this.currentLanguage
-            );
-
-            console.log('Result:', transliterated); // Debug log
-
-            if (transliterated && transliterated !== lastWord) {
-                // Replace the last word with transliterated version
-                this.replaceLastWord(transliterated);
-            }
-
-            // Add the space after transliteration
-            this.textEditor.insertText(' ');
-
-        } catch (error) {
-            console.error('Transliteration error:', error);
-            // On error, just add the space
-            this.textEditor.insertText(' ');
-        }
+    removeConvertedUnderlines() {
+        const convertedElements = document.querySelectorAll('.converted-text');
+        convertedElements.forEach(span => {
+            // Replace span with its text content
+            const textNode = document.createTextNode(span.textContent);
+            span.parentNode.replaceChild(textNode, span);
+        });
     }
 
     /**
@@ -136,6 +150,9 @@ export class TypingMode {
      * @param {InputEvent} e - Input event
      */
     async onInput(e) {
+        // Remove underlines when typing
+        this.removeConvertedUnderlines();
+        
         // Track typing for transliteration
         if (this.currentLanguage === 'hi' || this.currentLanguage === 'bn') {
             // Debounce for performance

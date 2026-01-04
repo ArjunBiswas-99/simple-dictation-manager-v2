@@ -68,6 +68,11 @@ class DictationApp {
             this.typingMode.setLanguage(e.target.value);
         });
 
+        // Convert button
+        document.getElementById('convertButton')?.addEventListener('click', () => {
+            this.typingMode.convertSelectedText();
+        });
+
         // Start button
         this.ui.getStartButton()?.addEventListener('click', () => {
             this.startDictation();
@@ -445,10 +450,17 @@ class DictationApp {
                 console.log('[App] Typing language selector shown');
             }
 
+            // Show convert button
+            const convertSection = document.getElementById('convertButtonSection');
+            if (convertSection) {
+                convertSection.style.display = 'flex';
+                console.log('[App] Convert button shown');
+            }
+
             // Update UI
             this.ui.setStartButtonEnabled(false);
-            this.ui.updateStatus('Typing mode - Click in text to edit', 'ready');
-            this.ui.showNotification('Typing mode enabled. Type and press space for transliteration.', 'info');
+            this.ui.updateStatus('Typing mode - Select text and click Convert', 'ready');
+            this.ui.showNotification('Typing mode enabled. Select text and click Convert to transliterate.', 'info');
             console.log('[App] Typing mode fully enabled');
 
         } else {
@@ -467,6 +479,13 @@ class DictationApp {
             const typingSection = document.getElementById('typingLanguageSection');
             if (typingSection) {
                 typingSection.style.display = 'none';
+            }
+
+            // Hide convert button
+            const convertSection = document.getElementById('convertButtonSection');
+            if (convertSection) {
+                convertSection.style.display = 'none';
+                console.log('[App] Convert button hidden');
             }
 
             // Update UI

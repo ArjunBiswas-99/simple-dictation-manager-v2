@@ -153,3 +153,12 @@
 .editor .new-text {
     animation: fadeIn 0.3s ease-in;
 }
+
+/* Converted text with dotted underline */
+.converted-text {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: #06b6d4;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
