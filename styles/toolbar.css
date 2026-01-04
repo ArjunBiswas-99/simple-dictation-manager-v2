@@ -114,3 +114,82 @@
         width: 100%;
     }
 }
+
+/* Quick Insert Toolbar */
+.quick-insert-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 15px 35px;
+    background: #f9fafb;
+    border-bottom: 2px solid #e5e7eb;
+    align-items: center;
+}
+
+.quick-insert-toolbar .toolbar-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quick-insert-toolbar label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0891b2;
+    margin-right: 5px;
+}
+
+/* Helper Buttons */
+.btn-helper {
+    min-width: 45px;
+    height: 38px;
+    padding: 8px 12px;
+    background: white;
+    border: 2px solid #e5e7eb;
+    color: #374151;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-helper:hover {
+    background: #ecfeff;
+    border-color: #0891b2;
+    color: #0891b2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(8, 145, 178, 0.2);
+}
+
+.btn-helper:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(8, 145, 178, 0.15);
+}
+
+/* Special styling for specific buttons */
+#insertEmDashBtn {
+    font-size: 20px;
+}
+
+#insertEllipsisBtn {
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+#insertBulletBtn {
+    font-size: 20px;
+}
+
+/* Responsive Quick Insert Toolbar */
+@media (max-width: 768px) {
+    .quick-insert-toolbar {
+        padding: 15px 20px;
+    }
+    
+    .quick-insert-toolbar .toolbar-section {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

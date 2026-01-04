@@ -11,6 +11,7 @@ import { CommandProcessor } from './commandProcessor.js';
 import { UIController } from './uiController.js';
 import { Transliteration } from './transliteration.js';
 import { TypingMode } from './typingMode.js';
+import { TextHelpers } from './textHelpers.js';
 
 class DictationApp {
     constructor() {
@@ -22,6 +23,7 @@ class DictationApp {
         this.commandProcessor = new CommandProcessor();
         this.transliteration = new Transliteration();
         this.typingMode = new TypingMode(this.textEditor, this.transliteration);
+        this.textHelpers = new TextHelpers(this.textEditor);
 
         // Application state
         this.isListening = false;
@@ -117,6 +119,44 @@ class DictationApp {
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             this.handleKeyboardShortcuts(e);
+        });
+
+        // Quick Insert buttons
+        document.getElementById('insertQuotesBtn')?.addEventListener('click', () => {
+            this.textHelpers.wrapOrInsert('"', '"');
+            this.textEditor.focus();
+        });
+
+        document.getElementById('insertSingleQuotesBtn')?.addEventListener('click', () => {
+            this.textHelpers.wrapOrInsert("'", "'");
+            this.textEditor.focus();
+        });
+
+        document.getElementById('insertParenthesesBtn')?.addEventListener('click', () => {
+            this.textHelpers.wrapOrInsert('(', ')');
+            this.textEditor.focus();
+        });
+
+        document.getElementById('insertEmDashBtn')?.addEventListener('click', () => {
+            this.textHelpers.insertEmDash();
+            this.textEditor.focus();
+        });
+
+        document.getElementById('insertEllipsisBtn')?.addEventListener('click', () => {
+            this.textHelpers.insertEllipsis();
+            this.textEditor.focus();
+        });
+
+        document.getElementById('insertBulletBtn')?.addEventListener('click', () => {
+            const selection = window.getSelection();
+            if (selection && !selection.isCollapsed) {
+                // Has selection - toggle list
+                this.textHelpers.toggleListForSelection();
+            } else {
+                // No selection - insert single bullet
+                this.textHelpers.insertBullet();
+            }
+            this.textEditor.focus();
         });
     }
 
