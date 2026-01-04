@@ -1,0 +1,88 @@
+/* Toolbar Styles */
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 25px 35px;
+    background: #ffffff;
+    border-bottom: 3px solid #e5e7eb;
+    align-items: center;
+}
+
+.toolbar-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toolbar-section label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+}
+
+/* Language Select */
+.language-select {
+    padding: 8px 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 180px;
+}
+
+.language-select:hover {
+    border-color: #0891b2;
+}
+
+.language-select:focus {
+    outline: none;
+    border-color: #0891b2;
+    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15);
+}
+
+/* Format Buttons */
+.btn-format {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: white;
+    border: 2px solid #e5e7eb;
+    color: #374151;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-format:hover {
+    background: #f0fdfa;
+    border-color: #0891b2;
+    color: #0891b2;
+}
+
+.btn-format.active {
+    background: #0891b2;
+    border-color: #0891b2;
+    color: white;
+}
+
+/* Responsive Toolbar */
+@media (max-width: 768px) {
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .toolbar-section {
+        justify-content: center;
+    }
+
+    .language-select {
+        width: 100%;
+    }
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Dictation Manager</title>
+    <!-- Google Fonts for better Indian language support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/toolbar.css">
+    <link rel="stylesheet" href="styles/editor.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Simple Dictation Manager</h1>
+            <div class="status-indicator">
+                <span id="statusText">Ready</span>
+                <span id="statusDot" class="status-dot"></span>
+            </div>
+        </header>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <!-- Language Selector -->
+            <div class="toolbar-section">
+                <label for="languageSelect">Language:</label>
+                <select id="languageSelect" class="language-select">
+                    <option value="en-US">English (US)</option>
+                    <option value="hi-IN">Hindi (हिन्दी)</option>
+                    <option value="bn-IN">Bengali (বাংলা)</option>
+                    <option value="de-DE">German (Deutsch)</option>
+                    <option value="es-ES">Spanish (Español)</option>
+                </select>
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="toolbar-section">
+                <button id="startBtn" class="btn btn-primary">
+                    <span class="btn-icon">🎤</span> Start Dictation
+                </button>
+                <button id="stopBtn" class="btn btn-secondary" disabled>
+                    <span class="btn-icon">⏸</span> Stop
+                </button>
+            </div>
+
+            <!-- Formatting Buttons -->
+            <div class="toolbar-section">
+                <button id="boldBtn" class="btn btn-format" title="Bold (Ctrl+B)">
+                    <strong>B</strong>
+                </button>
+                <button id="italicBtn" class="btn btn-format" title="Italic (Ctrl+I)">
+                    <em>I</em>
+                </button>
+                <button id="underlineBtn" class="btn btn-format" title="Underline (Ctrl+U)">
+                    <u>U</u>
+                </button>
+            </div>
+
+            <!-- Utility Buttons -->
+            <div class="toolbar-section">
+                <button id="clearBtn" class="btn btn-danger" title="Clear All">
+                    <span class="btn-icon">🗑</span> Clear
+                </button>
+                <button id="copyBtn" class="btn btn-secondary" title="Copy to Clipboard">
+                    <span class="btn-icon">📋</span> Copy
+                </button>
+            </div>
+        </div>
+
+        <!-- Editor Area -->
+        <div class="editor-container">
+            <div id="editor" class="editor" contenteditable="true" spellcheck="true"></div>
+        </div>
+
+        <!-- Info Panel -->
+        <div class="info-panel">
+            <div class="info-item">
+                <span class="info-label">Words:</span>
+                <span id="wordCount">0</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Characters:</span>
+                <span id="charCount">0</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Current Language:</span>
+                <span id="currentLang">English</span>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="help-section">
+            <h3>Voice Commands</h3>
+            <ul>
+                <li><strong>Punctuation:</strong> "comma", "period", "question mark", "exclamation mark"</li>
+                <li><strong>Navigation:</strong> "new line", "new paragraph"</li>
+                <li><strong>Editing:</strong> "delete that" (removes last sentence)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- JavaScript Modules (ES6 Modules) -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
