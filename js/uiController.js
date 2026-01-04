@@ -78,7 +78,7 @@ export class UIController {
     /**
      * Update status display
      * @param {string} text - Status text
-     * @param {string} state - State: 'ready', 'listening', 'error'
+     * @param {string} state - State: 'ready', 'listening', 'detecting', 'processing', 'error'
      */
     updateStatus(text, state = 'ready') {
         if (this.elements.statusText) {
@@ -86,9 +86,18 @@ export class UIController {
         }
 
         if (this.elements.statusDot) {
-            this.elements.statusDot.classList.remove('listening');
+            // Remove all state classes
+            this.elements.statusDot.classList.remove('listening', 'detecting', 'processing', 'error');
+            
+            // Add appropriate state class
             if (state === 'listening') {
                 this.elements.statusDot.classList.add('listening');
+            } else if (state === 'detecting') {
+                this.elements.statusDot.classList.add('detecting');
+            } else if (state === 'processing') {
+                this.elements.statusDot.classList.add('processing');
+            } else if (state === 'error') {
+                this.elements.statusDot.classList.add('error');
             }
         }
     }
@@ -140,24 +149,33 @@ export class UIController {
     /**
      * Show notification message
      * @param {string} message - Message to show
-     * @param {string} type - Type: 'success', 'error', 'info'
+     * @param {string} type - Type: 'success', 'error', 'info', 'warning'
      */
     showNotification(message, type = 'info') {
         // Create notification element
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
         notification.textContent = message;
+        
+        const colors = {
+            success: '#10b981',
+            error: '#ef4444',
+            warning: '#f59e0b',
+            info: '#3b82f6'
+        };
+        
         notification.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
             padding: 15px 20px;
-            background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+            background: ${colors[type] || colors.info};
             color: white;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             z-index: 1000;
             animation: slideIn 0.3s ease-out;
+            font-weight: 500;
         `;
 
         document.body.appendChild(notification);
@@ -166,7 +184,9 @@ export class UIController {
         setTimeout(() => {
             notification.style.animation = 'slideOut 0.3s ease-out';
             setTimeout(() => {
-                document.body.removeChild(notification);
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
             }, 300);
         }, 3000);
     }
@@ -250,6 +270,34 @@ export class UIController {
      */
     confirm(message) {
         return window.confirm(message);
+    }
+
+    /**
+     * Show interim text preview
+     * @param {string} text - Interim text to display
+     */
+    showInterimPreview(text) {
+        // Remove existing preview
+        this.hideInterimPreview();
+        
+        if (!text) return;
+        
+        const preview = document.createElement('div');
+        preview.className = 'interim-preview';
+        preview.id = 'interim-preview';
+        preview.textContent = text;
+        
+        document.body.appendChild(preview);
+    }
+
+    /**
+     * Hide interim text preview
+     */
+    hideInterimPreview() {
+        const preview = document.getElementById('interim-preview');
+        if (preview) {
+            document.body.removeChild(preview);
+        }
     }
 
     /**

@@ -156,13 +156,31 @@ class DictationApp {
      * @param {Object} result - Recognition result
      */
     handleSpeechResult(result) {
-        if (!result.final) {
-            // Interim result - just for display (optional enhancement)
+        // Show interim results in preview
+        if (!result.isFinal && result.interim) {
+            this.ui.showInterimPreview(result.interim);
+            this.ui.updateStatus('Detecting speech...', 'detecting');
             return;
         }
 
+        // Hide interim preview when final result comes
+        this.ui.hideInterimPreview();
+        this.ui.updateStatus('Processing text...', 'processing');
+
         const transcript = result.final.trim();
-        if (!transcript) return;
+        if (!transcript) {
+            // No speech detected warning
+            this.ui.updateStatus('No speech detected', 'error');
+            this.ui.showNotification('⚠️ No speech detected. Please speak clearly.', 'warning');
+            
+            // Reset to listening after 2 seconds
+            setTimeout(() => {
+                if (this.isListening) {
+                    this.ui.updateStatus('Listening...', 'listening');
+                }
+            }, 2000);
+            return;
+        }
 
         // Process the transcript through command processor
         const processed = this.commandProcessor.process(transcript);
@@ -179,6 +197,14 @@ class DictationApp {
 
         this.lastTranscript = transcript;
         this.textEditor.focus();
+        
+        // Show success and return to listening
+        this.ui.updateStatus('Text added ✓', 'listening');
+        setTimeout(() => {
+            if (this.isListening) {
+                this.ui.updateStatus('Listening...', 'listening');
+            }
+        }, 1000);
     }
 
     /**
@@ -223,23 +249,30 @@ class DictationApp {
 
         switch (error) {
             case 'no-speech':
-                message = 'No speech detected. Please try again.';
+                message = '⚠️ No speech detected. Please try speaking again.';
+                this.ui.updateStatus('No speech detected', 'error');
                 break;
             case 'audio-capture':
-                message = 'No microphone found. Please check your microphone.';
+                message = '❌ No microphone found. Please check your microphone.';
+                this.ui.updateStatus('Microphone error', 'error');
                 break;
             case 'not-allowed':
-                message = 'Microphone access denied. Please allow microphone access.';
+                message = '❌ Microphone access denied. Please allow microphone access.';
+                this.ui.updateStatus('Permission denied', 'error');
                 break;
             case 'network':
-                message = 'Network error. Please check your internet connection.';
+                message = '❌ Network error. Please check your internet connection.';
+                this.ui.updateStatus('Network error', 'error');
                 break;
             default:
-                message = `Speech recognition error: ${error}`;
+                message = `❌ Speech recognition error: ${error}`;
+                this.ui.updateStatus('Error occurred', 'error');
         }
 
         this.ui.showNotification(message, 'error');
-        this.ui.updateStatus('Error occurred', 'error');
+        
+        // Hide interim preview on error
+        this.ui.hideInterimPreview();
     }
 
     /**
