@@ -2,6 +2,12 @@
 
 A professional web-based speech-to-text application with multi-language support and MS Word-like interface. Built with vanilla JavaScript following SOLID principles.
 
+## 🌐 Live Demo
+
+**Try it now:** [https://arjunbiswas-99.github.io/simple-dictation-manager-v2/](https://arjunbiswas-99.github.io/simple-dictation-manager-v2/)
+
+No installation needed - just open the link and start dictating!
+
 ## Features
 
 ✅ **Real-time Speech Recognition** - Live transcription as you speak  
@@ -22,6 +28,18 @@ A professional web-based speech-to-text application with multi-language support 
 - **Python 3**: For running local server
 
 ## Quick Start
+
+### Option 1: Use GitHub Pages (Recommended)
+
+Simply open the live link in Chrome or Edge:
+
+**[https://arjunbiswas-99.github.io/simple-dictation-manager-v2/](https://arjunbiswas-99.github.io/simple-dictation-manager-v2/)**
+
+- No installation required
+- Works immediately
+- HTTPS enabled (microphone access works)
+
+### Option 2: Run Locally
 
 ### 1. Navigate to Project Directory
 
