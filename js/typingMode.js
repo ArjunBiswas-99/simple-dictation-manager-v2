@@ -18,12 +18,17 @@ export class TypingMode {
      * Enable typing mode
      */
     enable() {
-        if (this.isActive) return;
+        if (this.isActive) {
+            console.log('[TypingMode] Already active');
+            return;
+        }
 
+        console.log('[TypingMode] Enabling typing mode');
         this.isActive = true;
         this.typingBuffer = '';
         this.setupTypingListeners();
         this.textEditor.focus();
+        console.log('[TypingMode] Typing mode enabled');
     }
 
     /**
@@ -41,12 +46,14 @@ export class TypingMode {
      * Setup typing event listeners
      */
     setupTypingListeners() {
+        console.log('[TypingMode] Setting up event listeners');
         this.handleKeyDown = this.onKeyDown.bind(this);
         this.handleInput = this.onInput.bind(this);
         
         const editor = this.textEditor.editor;
         editor.addEventListener('keydown', this.handleKeyDown);
         editor.addEventListener('input', this.handleInput);
+        console.log('[TypingMode] Event listeners attached');
     }
 
     /**
@@ -67,11 +74,18 @@ export class TypingMode {
      * @param {KeyboardEvent} e - Keyboard event
      */
     async onKeyDown(e) {
+        console.log('[TypingMode] Key pressed:', e.key, 'Language:', this.currentLanguage);
+        
         // Trigger transliteration on space or punctuation
         if (e.key === ' ' || e.key === '.' || e.key === ',' || e.key === '!' || e.key === '?') {
+            console.log('[TypingMode] Trigger key detected');
+            
             if (this.currentLanguage === 'hi' || this.currentLanguage === 'bn') {
+                console.log('[TypingMode] Language requires transliteration, preventing default');
                 e.preventDefault(); // Prevent default to control the space insertion
                 await this.processTransliterationOnSpace();
+            } else {
+                console.log('[TypingMode] Language does not require transliteration');
             }
         }
     }
@@ -211,6 +225,7 @@ export class TypingMode {
      * @param {string} languageCode - Language code
      */
     setLanguage(languageCode) {
+        console.log('[TypingMode] Setting language to:', languageCode);
         this.currentLanguage = languageCode;
         this.transliteration.setLanguage(languageCode);
         this.typingBuffer = '';
@@ -219,6 +234,7 @@ export class TypingMode {
         if (this.onLanguageChangeCallback) {
             this.onLanguageChangeCallback(languageCode);
         }
+        console.log('[TypingMode] Language set to:', this.currentLanguage);
     }
 
     /**

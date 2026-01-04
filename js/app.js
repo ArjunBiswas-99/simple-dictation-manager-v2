@@ -416,29 +416,36 @@ class DictationApp {
      * @param {string} mode - 'dictate' or 'type'
      */
     switchMode(mode) {
+        console.log('[App] Switching mode to:', mode);
         this.currentMode = mode;
 
         if (mode === 'type') {
             // Stop dictation if active
             if (this.isListening) {
+                console.log('[App] Stopping active dictation');
                 this.stopDictation();
             }
 
             // Enable typing mode
+            console.log('[App] Enabling typing mode');
             this.typingMode.enable();
 
             // Show typing language selector
             const typingSection = document.getElementById('typingLanguageSection');
             if (typingSection) {
                 typingSection.style.display = 'flex';
+                console.log('[App] Typing language selector shown');
             }
 
             // Update UI
             this.ui.setStartButtonEnabled(false);
             this.ui.updateStatus('Typing mode - Click in text to edit', 'ready');
             this.ui.showNotification('Typing mode enabled. Type and press space for transliteration.', 'info');
+            console.log('[App] Typing mode fully enabled');
 
         } else {
+            console.log('[App] Switching to dictate mode');
+            
             // Disable typing mode
             this.typingMode.disable();
 
@@ -452,6 +459,7 @@ class DictationApp {
             this.ui.setStartButtonEnabled(true);
             this.ui.updateStatus('Ready to start dictation', 'ready');
             this.ui.showNotification('Dictation mode enabled', 'info');
+            console.log('[App] Dictation mode enabled');
         }
     }
 }

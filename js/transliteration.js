@@ -18,23 +18,29 @@ export class Transliteration {
      * @returns {Promise<string>} Transliterated text
      */
     async transliterate(text, languageCode) {
+        console.log('[Transliteration] Called with text:', text, 'language:', languageCode);
+        
         if (!text || text.trim() === '') {
+            console.log('[Transliteration] Empty text, returning as-is');
             return text;
         }
 
         // For English and other languages, return as-is
         if (languageCode === 'en' || languageCode === 'de' || languageCode === 'es') {
+            console.log('[Transliteration] Non-transliteration language, returning as-is');
             return text;
         }
 
         // For Hindi and Bengali, use Google Input Tools
         try {
+            console.log('[Transliteration] Starting Google Input Tools API call');
             this.isTransliterating = true;
             const result = await this.callGoogleInputTools(text, languageCode);
             this.isTransliterating = false;
+            console.log('[Transliteration] API result:', result);
             return result;
         } catch (error) {
-            console.error('Transliteration error:', error);
+            console.error('[Transliteration] Error:', error);
             this.isTransliterating = false;
             return text; // Return original text on error
         }
@@ -53,7 +59,10 @@ export class Transliteration {
         };
 
         const targetLanguage = languageMap[languageCode];
+        console.log('[API] Target language code:', targetLanguage);
+        
         if (!targetLanguage) {
+            console.log('[API] No target language found, returning original');
             return text;
         }
 
@@ -66,6 +75,9 @@ export class Transliteration {
             }
         };
 
+        console.log('[API] Request body:', JSON.stringify(requestBody));
+        console.log('[API] Making request to:', this.apiUrl);
+
         try {
             const response = await fetch(this.apiUrl, {
                 method: 'POST',
@@ -75,20 +87,28 @@ export class Transliteration {
                 body: JSON.stringify(requestBody)
             });
 
+            console.log('[API] Response status:', response.status);
+            console.log('[API] Response ok:', response.ok);
+
             if (!response.ok) {
-                throw new Error('API request failed');
+                throw new Error('API request failed with status: ' + response.status);
             }
 
             const data = await response.json();
+            console.log('[API] Response data:', JSON.stringify(data));
             
             // Extract the best transliteration result
             if (data && data[1] && data[1][0] && data[1][0][1] && data[1][0][1][0]) {
-                return data[1][0][1][0];
+                const result = data[1][0][1][0];
+                console.log('[API] Extracted result:', result);
+                return result;
             }
 
+            console.log('[API] No result found in response, returning original');
             return text;
         } catch (error) {
-            console.error('Google Input Tools API error:', error);
+            console.error('[API] Error:', error.message);
+            console.error('[API] Full error:', error);
             return text;
         }
     }
