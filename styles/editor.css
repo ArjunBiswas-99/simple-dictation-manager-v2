@@ -65,6 +65,27 @@
     line-height: 2.4;
 }
 
+/* Language-specific color coding for typed text */
+.editor .lang-hi,
+.editor .lang-bn {
+    background-color: rgba(8, 145, 178, 0.08);
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+.editor .lang-hi:hover,
+.editor .lang-bn:hover {
+    background-color: rgba(8, 145, 178, 0.15);
+}
+
+/* Keep English/German/Spanish without background */
+.editor .lang-en,
+.editor .lang-de,
+.editor .lang-es {
+    background-color: transparent;
+}
+
 /* Scrollbar Styling */
 .editor::-webkit-scrollbar {
     width: 8px;

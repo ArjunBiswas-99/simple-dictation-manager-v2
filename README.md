@@ -11,11 +11,12 @@ No installation needed - just open the link and start dictating!
 ## Features
 
 ✅ **Real-time Speech Recognition** - Live transcription as you speak  
+✅ **Typing Mode with Transliteration** - Type Hindi/Bengali phonetically in English  
+✅ **Mixed Language Support** - Seamlessly mix English, Hindi, Bengali, German, Spanish  
 ✅ **Real-time Interim Text Preview** - See what's being detected as you speak  
 ✅ **Enhanced Visual Feedback** - Multi-state status indicators (Listening → Detecting → Processing → Done)  
 ✅ **Speech Detection Warnings** - Instant alerts when speech isn't detected  
-✅ **Multi-language Support** - English, Hindi, Bengali, German, Spanish  
-✅ **Manual Language Switching** - Easy dropdown to switch between languages  
+✅ **Language Color Coding** - Subtle background for Hindi/Bengali text  
 ✅ **Voice Commands** - Punctuation, navigation, and editing commands  
 ✅ **Rich Text Formatting** - Bold, italic, underline  
 ✅ **Auto-capitalization** - Smart sentence capitalization  
@@ -80,6 +81,34 @@ When prompted, click "Allow" to grant microphone access.
    - ⚠️ Warning popup = No speech detected (speak more clearly)
 
 ## Usage
+
+### Two Modes: Dictate & Type
+
+#### 🎤 Dictation Mode (Default)
+- Speak naturally and text appears automatically
+- Change language dropdown to speak in different languages
+- Voice commands work (comma, period, new line, etc.)
+
+#### ⌨️ Typing Mode (NEW!)
+- **Switch to typing mode** from the Mode dropdown
+- **Manual keyboard input** with transliteration support
+- Perfect for editing or inserting text mid-dictation
+
+**Typing with Transliteration:**
+1. Select **Mode: Type** from dropdown
+2. Choose **Typing Language** (English, Hindi, Bengali, etc.)
+3. Click where you want to type in the editor
+4. For **Hindi/Bengali**: Type phonetically in English
+   - Type `namaste` → Get `नमस्ते` (Hindi)
+   - Type `naam` → Get `নাম` (Bengali)
+   - Type word + **space** to trigger transliteration
+5. For **English/German/Spanish**: Normal typing
+6. Switch back to **Dictate mode** to resume speech recognition
+
+**Language Color Coding:**
+- Hindi/Bengali text has a **subtle teal background** for easy identification
+- English/German/Spanish text has no background
+- Makes mixed-language documents easy to read
 
 ### Visual Feedback System
 

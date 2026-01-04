@@ -23,7 +23,8 @@
 }
 
 /* Language Select */
-.language-select {
+.language-select,
+.mode-select {
     padding: 8px 12px;
     border: 2px solid #e5e7eb;
     border-radius: 6px;
@@ -34,11 +35,13 @@
     min-width: 180px;
 }
 
-.language-select:hover {
+.language-select:hover,
+.mode-select:hover {
     border-color: #0891b2;
 }
 
-.language-select:focus {
+.language-select:focus,
+.mode-select:focus {
     outline: none;
     border-color: #0891b2;
     box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15);

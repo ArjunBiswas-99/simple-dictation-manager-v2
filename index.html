@@ -27,6 +27,15 @@
 
         <!-- Toolbar -->
         <div class="toolbar">
+            <!-- Mode Selector -->
+            <div class="toolbar-section">
+                <label for="modeSelect">Mode:</label>
+                <select id="modeSelect" class="mode-select">
+                    <option value="dictate">🎤 Dictate</option>
+                    <option value="type">⌨️ Type</option>
+                </select>
+            </div>
+
             <!-- Language Selector -->
             <div class="toolbar-section">
                 <label for="languageSelect">Language:</label>
@@ -36,6 +45,18 @@
                     <option value="bn-IN">Bengali (বাংলা)</option>
                     <option value="de-DE">German (Deutsch)</option>
                     <option value="es-ES">Spanish (Español)</option>
+                </select>
+            </div>
+
+            <!-- Typing Language Selector (hidden by default) -->
+            <div class="toolbar-section" id="typingLanguageSection" style="display: none;">
+                <label for="typingLanguageSelect">Typing:</label>
+                <select id="typingLanguageSelect" class="language-select">
+                    <option value="en">English</option>
+                    <option value="hi">Hindi (transliteration)</option>
+                    <option value="bn">Bengali (transliteration)</option>
+                    <option value="de">German</option>
+                    <option value="es">Spanish</option>
                 </select>
             </div>
 

@@ -9,6 +9,8 @@ import { TextEditor } from './textEditor.js';
 import { LanguageManager } from './languageManager.js';
 import { CommandProcessor } from './commandProcessor.js';
 import { UIController } from './uiController.js';
+import { Transliteration } from './transliteration.js';
+import { TypingMode } from './typingMode.js';
 
 class DictationApp {
     constructor() {
@@ -18,10 +20,13 @@ class DictationApp {
         this.textEditor = new TextEditor(this.ui.getEditor());
         this.languageManager = new LanguageManager();
         this.commandProcessor = new CommandProcessor();
+        this.transliteration = new Transliteration();
+        this.typingMode = new TypingMode(this.textEditor, this.transliteration);
 
         // Application state
         this.isListening = false;
         this.lastTranscript = '';
+        this.currentMode = 'dictate'; // 'dictate' or 'type'
 
         // Initialize app
         this.init();
@@ -53,6 +58,16 @@ class DictationApp {
      * Setup UI event handlers
      */
     setupEventHandlers() {
+        // Mode select
+        document.getElementById('modeSelect')?.addEventListener('change', (e) => {
+            this.switchMode(e.target.value);
+        });
+
+        // Typing language select
+        document.getElementById('typingLanguageSelect')?.addEventListener('change', (e) => {
+            this.typingMode.setLanguage(e.target.value);
+        });
+
         // Start button
         this.ui.getStartButton()?.addEventListener('click', () => {
             this.startDictation();
@@ -360,6 +375,11 @@ class DictationApp {
      * @param {KeyboardEvent} e - Keyboard event
      */
     handleKeyboardShortcuts(e) {
+        // Don't interfere with typing mode
+        if (this.currentMode === 'type') {
+            return;
+        }
+
         // Ctrl/Cmd + B = Bold
         if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
             e.preventDefault();
@@ -388,6 +408,50 @@ class DictationApp {
         if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'X') {
             e.preventDefault();
             this.clearEditor();
+        }
+    }
+
+    /**
+     * Switch between dictate and type mode
+     * @param {string} mode - 'dictate' or 'type'
+     */
+    switchMode(mode) {
+        this.currentMode = mode;
+
+        if (mode === 'type') {
+            // Stop dictation if active
+            if (this.isListening) {
+                this.stopDictation();
+            }
+
+            // Enable typing mode
+            this.typingMode.enable();
+
+            // Show typing language selector
+            const typingSection = document.getElementById('typingLanguageSection');
+            if (typingSection) {
+                typingSection.style.display = 'flex';
+            }
+
+            // Update UI
+            this.ui.setStartButtonEnabled(false);
+            this.ui.updateStatus('Typing mode - Click in text to edit', 'ready');
+            this.ui.showNotification('Typing mode enabled. Type and press space for transliteration.', 'info');
+
+        } else {
+            // Disable typing mode
+            this.typingMode.disable();
+
+            // Hide typing language selector
+            const typingSection = document.getElementById('typingLanguageSection');
+            if (typingSection) {
+                typingSection.style.display = 'none';
+            }
+
+            // Update UI
+            this.ui.setStartButtonEnabled(true);
+            this.ui.updateStatus('Ready to start dictation', 'ready');
+            this.ui.showNotification('Dictation mode enabled', 'info');
         }
     }
 }
