@@ -191,32 +191,71 @@ export class TypingMode {
      * @param {string} newWord - Transliterated word
      */
     replaceLastWord(newWord) {
-        const text = this.textEditor.getText();
-        const words = text.trim().split(/\s+/);
+        const selection = window.getSelection();
+        const range = selection.getRangeAt(0);
+        const editor = this.textEditor.editor;
         
-        if (words.length > 0) {
-            // Replace last word
-            words[words.length - 1] = newWord;
-            const newText = words.join(' ');
+        // Get text before cursor
+        const tempRange = document.createRange();
+        tempRange.selectNodeContents(editor);
+        tempRange.setEnd(range.endContainer, range.endOffset);
+        const textBeforeCursor = tempRange.toString();
+        
+        // Find the last word
+        const match = textBeforeCursor.match(/([a-zA-Z\u0980-\u09FF\u0900-\u097F]+)$/);
+        if (!match) {
+            console.log('[TypingMode] No word found to replace');
+            return;
+        }
+        
+        const lastWord = match[1];
+        const wordStart = textBeforeCursor.length - lastWord.length;
+        
+        // Create range for the last word
+        const wordRange = document.createRange();
+        wordRange.selectNodeContents(editor);
+        
+        let charCount = 0;
+        let startNode = null;
+        let startOffset = 0;
+        
+        // Find the start position of the last word
+        const walker = document.createTreeWalker(
+            editor,
+            NodeFilter.SHOW_TEXT,
+            null,
+            false
+        );
+        
+        while (walker.nextNode()) {
+            const node = walker.currentNode;
+            const nodeLength = node.textContent.length;
             
-            // Update editor content
-            this.textEditor.editor.textContent = newText;
-            
-            // Move cursor to end
-            const range = document.createRange();
-            const selection = window.getSelection();
-            
-            if (this.textEditor.editor.childNodes.length > 0) {
-                const lastNode = this.textEditor.editor.childNodes[this.textEditor.editor.childNodes.length - 1];
-                range.setStartAfter(lastNode);
-                range.setEndAfter(lastNode);
-            } else {
-                range.selectNodeContents(this.textEditor.editor);
-                range.collapse(false);
+            if (charCount + nodeLength >= wordStart) {
+                startNode = node;
+                startOffset = wordStart - charCount;
+                break;
             }
+            charCount += nodeLength;
+        }
+        
+        if (startNode) {
+            wordRange.setStart(startNode, startOffset);
+            wordRange.setEnd(range.endContainer, range.endOffset);
             
+            // Replace with transliterated text
+            wordRange.deleteContents();
+            const textNode = document.createTextNode(newWord);
+            wordRange.insertNode(textNode);
+            
+            // Position cursor after the new word
+            const newRange = document.createRange();
+            newRange.setStartAfter(textNode);
+            newRange.collapse(true);
             selection.removeAllRanges();
-            selection.addRange(range);
+            selection.addRange(newRange);
+            
+            console.log('[TypingMode] Replaced', lastWord, 'with', newWord);
         }
     }
 
