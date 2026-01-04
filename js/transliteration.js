@@ -66,25 +66,32 @@ export class Transliteration {
             return text;
         }
 
-        const requestBody = {
-            method: 'transliterate',
-            params: {
-                text: text,
-                itc: targetLanguage,
-                num: 5 // Number of suggestions
-            }
-        };
+        // Correct Google Input Tools API format
+        const requestBody = [
+            [
+                'ds',
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                [text, targetLanguage, null, 1]
+            ]
+        ];
 
         console.log('[API] Request body:', JSON.stringify(requestBody));
         console.log('[API] Making request to:', this.apiUrl);
 
         try {
-            const response = await fetch(this.apiUrl, {
-                method: 'POST',
+            const response = await fetch(this.apiUrl + '?ime=transliteration&component=proactive&text=' + encodeURIComponent(text) + '&itc=' + targetLanguage, {
+                method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestBody)
+                    'Accept': 'application/json',
+                }
             });
 
             console.log('[API] Response status:', response.status);

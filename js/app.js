@@ -419,11 +419,19 @@ class DictationApp {
         console.log('[App] Switching mode to:', mode);
         this.currentMode = mode;
 
+        const dictationLangSelect = document.getElementById('language-select');
+
         if (mode === 'type') {
             // Stop dictation if active
             if (this.isListening) {
                 console.log('[App] Stopping active dictation');
                 this.stopDictation();
+            }
+
+            // Disable dictation language dropdown
+            if (dictationLangSelect) {
+                dictationLangSelect.disabled = true;
+                console.log('[App] Dictation language dropdown disabled');
             }
 
             // Enable typing mode
@@ -446,6 +454,12 @@ class DictationApp {
         } else {
             console.log('[App] Switching to dictate mode');
             
+            // Enable dictation language dropdown
+            if (dictationLangSelect) {
+                dictationLangSelect.disabled = false;
+                console.log('[App] Dictation language dropdown enabled');
+            }
+
             // Disable typing mode
             this.typingMode.disable();
 
