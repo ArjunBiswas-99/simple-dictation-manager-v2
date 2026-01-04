@@ -11,6 +11,9 @@ No installation needed - just open the link and start dictating!
 ## Features
 
 ✅ **Real-time Speech Recognition** - Live transcription as you speak  
+✅ **Real-time Interim Text Preview** - See what's being detected as you speak  
+✅ **Enhanced Visual Feedback** - Multi-state status indicators (Listening → Detecting → Processing → Done)  
+✅ **Speech Detection Warnings** - Instant alerts when speech isn't detected  
 ✅ **Multi-language Support** - English, Hindi, Bengali, German, Spanish  
 ✅ **Manual Language Switching** - Easy dropdown to switch between languages  
 ✅ **Voice Commands** - Punctuation, navigation, and editing commands  
@@ -69,8 +72,23 @@ When prompted, click "Allow" to grant microphone access.
 1. Select your language from the dropdown
 2. Click "Start Dictation" button
 3. Start speaking!
+4. **Watch the visual feedback:**
+   - 🔴 Red pulsing = Listening for speech
+   - 🟠 Orange pulsing = Speech detected
+   - 🔵 Blue spinning = Processing text
+   - ✅ Green = Text added successfully
+   - ⚠️ Warning popup = No speech detected (speak more clearly)
 
 ## Usage
+
+### Visual Feedback System
+
+The app provides real-time feedback as you speak:
+
+- **Interim Text Preview**: A floating box at the bottom shows what's being detected as you speak (before it's finalized)
+- **Status Indicators**: Color-coded dots show the current state
+  - Ready (Green) → Listening (Red) → Detecting (Orange) → Processing (Blue) → Done (Green)
+- **Warnings**: Immediate red notifications if speech isn't detected properly
 
 ### Language Switching
 
