@@ -151,10 +151,17 @@ The app provides real-time feedback as you speak:
 - Click **I** button for italic
 - Click **U** button for underline
 
-**Using Keyboard:**
+**Using Keyboard Shortcuts:**
 - `Ctrl+B` (or `Cmd+B` on Mac) - Bold
 - `Ctrl+I` (or `Cmd+I` on Mac) - Italic
 - `Ctrl+U` (or `Cmd+U` on Mac) - Underline
+- `Ctrl+Z` (or `Cmd+Z` on Mac) - Undo
+- `Ctrl+Shift+Z` (or `Cmd+Shift+Z` on Mac) - Redo
+- `Ctrl+Y` (or `Cmd+Y` on Windows) - Redo
+- `Ctrl+A` (or `Cmd+A` on Mac) - Select All
+- `Ctrl+C` (or `Cmd+C` on Mac) - Copy
+- `Ctrl+X` (or `Cmd+X` on Mac) - Cut
+- `Ctrl+V` (or `Cmd+V` on Mac) - Paste
 
 ### Other Actions
 

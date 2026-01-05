@@ -25,6 +25,78 @@ export class TextEditor {
         this.editor.addEventListener('input', () => {
             this.onContentChange();
         });
+
+        // Handle keyboard shortcuts
+        this.editor.addEventListener('keydown', (e) => {
+            this.handleKeyboardShortcuts(e);
+        });
+    }
+
+    /**
+     * Handle keyboard shortcuts
+     * @param {KeyboardEvent} e - Keyboard event
+     */
+    handleKeyboardShortcuts(e) {
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        const modifier = isMac ? e.metaKey : e.ctrlKey;
+
+        if (!modifier) return;
+
+        switch (e.key.toLowerCase()) {
+            case 'z':
+                if (e.shiftKey) {
+                    // Ctrl/Cmd + Shift + Z: Redo
+                    e.preventDefault();
+                    this.redo();
+                } else {
+                    // Ctrl/Cmd + Z: Undo
+                    e.preventDefault();
+                    this.undo();
+                }
+                break;
+
+            case 'y':
+                // Ctrl/Cmd + Y: Redo (Windows style)
+                if (!isMac) {
+                    e.preventDefault();
+                    this.redo();
+                }
+                break;
+
+            case 'a':
+                // Ctrl/Cmd + A: Select All (let default behavior work)
+                break;
+
+            case 'c':
+                // Ctrl/Cmd + C: Copy (let default behavior work)
+                break;
+
+            case 'v':
+                // Ctrl/Cmd + V: Paste (handled by paste event listener)
+                break;
+
+            case 'x':
+                // Ctrl/Cmd + X: Cut (let default behavior work)
+                break;
+
+            case 'b':
+                // Ctrl/Cmd + B: Bold
+                e.preventDefault();
+                this.bold();
+                break;
+
+            case 'i':
+                // Ctrl/Cmd + I: Italic
+                e.preventDefault();
+                this.italic();
+                break;
+
+            case 'u':
+                // Ctrl/Cmd + U: Underline
+                e.preventDefault();
+                this.underline();
+                break;
+        }
     }
 
     /**
