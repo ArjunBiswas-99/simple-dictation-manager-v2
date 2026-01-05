@@ -66,6 +66,10 @@ export class Transliteration {
             return text;
         }
 
+        // Extract special characters and their positions
+        const specialChars = this.extractSpecialCharacters(text);
+        console.log('[API] Special characters found:', specialChars);
+
         // Correct Google Input Tools API format
         const requestBody = [
             [
@@ -104,11 +108,29 @@ export class Transliteration {
             const data = await response.json();
             console.log('[API] Response data:', JSON.stringify(data));
             
-            // Extract the best transliteration result
-            if (data && data[1] && data[1][0] && data[1][0][1] && data[1][0][1][0]) {
-                const result = data[1][0][1][0];
-                console.log('[API] Extracted result:', result);
-                return result;
+            // Extract ALL transliteration segments
+            if (data && data[1] && Array.isArray(data[1])) {
+                const segments = [];
+                
+                // Loop through all segments in the response
+                for (const segment of data[1]) {
+                    if (segment && segment[1] && segment[1][0]) {
+                        segments.push(segment[1][0]);
+                        console.log('[API] Extracted segment:', segment[1][0]);
+                    }
+                }
+                
+                if (segments.length > 0) {
+                    // Join all segments
+                    let result = segments.join('');
+                    console.log('[API] Combined segments:', result);
+                    
+                    // Re-insert special characters
+                    result = this.reinsertSpecialCharacters(result, specialChars, text);
+                    console.log('[API] Final result with special chars:', result);
+                    
+                    return result;
+                }
             }
 
             console.log('[API] No result found in response, returning original');
@@ -118,6 +140,64 @@ export class Transliteration {
             console.error('[API] Full error:', error);
             return text;
         }
+    }
+
+    /**
+     * Extract special characters and their positions from text
+     * @param {string} text - Input text
+     * @returns {Array} Array of {char, position} objects
+     */
+    extractSpecialCharacters(text) {
+        const specialChars = [];
+        const specialCharRegex = /[^a-zA-Z\s\u0900-\u097F\u0980-\u09FF]/g;
+        let match;
+        
+        while ((match = specialCharRegex.exec(text)) !== null) {
+            specialChars.push({
+                char: match[0],
+                position: match.index,
+                // Count words before this position
+                wordPosition: text.substring(0, match.index).trim().split(/\s+/).filter(w => w).length
+            });
+        }
+        
+        return specialChars;
+    }
+
+    /**
+     * Reinsert special characters into transliterated text
+     * @param {string} transliterated - Transliterated text
+     * @param {Array} specialChars - Array of special character objects
+     * @param {string} originalText - Original text for reference
+     * @returns {string} Text with special characters reinserted
+     */
+    reinsertSpecialCharacters(transliterated, specialChars, originalText) {
+        if (specialChars.length === 0) {
+            return transliterated;
+        }
+
+        // Try to match positions based on word count
+        const transliteratedWords = transliterated.split(/\s+/).filter(w => w);
+        let result = transliterated;
+        
+        // Insert special characters at appropriate positions
+        for (const special of specialChars.reverse()) {
+            // If special char was at end of a word, append it
+            if (special.wordPosition < transliteratedWords.length) {
+                const wordIndex = special.wordPosition;
+                const words = result.split(/\s+/).filter(w => w);
+                
+                if (wordIndex < words.length) {
+                    words[wordIndex] = words[wordIndex] + special.char;
+                    result = words.join(' ');
+                }
+            } else {
+                // Append at end
+                result += special.char;
+            }
+        }
+        
+        return result;
     }
 
     /**
