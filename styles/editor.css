@@ -1,135 +1,146 @@
-/* Editor Styles */
+/* Premium Editor Styles */
 
-.editor-container {
-    min-height: 500px;
-    padding: 35px;
-    background: #fafaf9;
+.editor-premium-container {
+    min-height: 600px;
+    padding: 32px;
+    background: var(--bg-primary);
 }
 
-.editor {
-    min-height: 450px;
-    padding: 25px;
-    border: 2px solid #e5e7eb;
-    border-radius: 10px;
+.editor-premium {
+    min-height: 550px;
+    max-height: 700px;
+    overflow-y: auto;
+    padding: 32px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
     font-size: 18px;
-    line-height: 2.2;
-    color: #1f2937;
-    background: #ffffff;
+    line-height: 2;
+    color: var(--text-primary);
+    background: var(--bg-primary);
     outline: none;
-    transition: all 0.2s;
+    transition: all 0.3s;
+    box-shadow: var(--shadow-sm);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-.editor:focus {
-    border-color: #0891b2;
-    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15);
+.editor-premium:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1), var(--shadow-md);
 }
 
-.editor:empty:before {
-    content: "Start speaking to dictate text... Select your language and click 'Start Dictation'";
-    color: #9ca3af;
+.editor-premium:empty:before {
+    content: "Start speaking or typing to create your document... Select your language and mode above.";
+    color: var(--text-muted);
     font-style: italic;
     font-size: 16px;
 }
 
 /* Rich Text Formatting */
-.editor strong,
-.editor b {
+.editor-premium strong,
+.editor-premium b {
     font-weight: 700;
+    color: var(--text-primary);
 }
 
-.editor em,
-.editor i {
+.editor-premium em,
+.editor-premium i {
     font-style: italic;
 }
 
-.editor u {
+.editor-premium u {
     text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
 }
 
-.editor p {
-    margin-bottom: 12px;
+.editor-premium p {
+    margin-bottom: 16px;
 }
 
 /* Multi-language Support */
-.editor {
+.editor-premium {
     /* Support for various scripts */
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 
-                 'Noto Sans', 'Noto Sans Devanagari', 'Noto Sans Bengali',
-                 sans-serif;
+    font-family: 'Inter', 'Noto Sans', 'Noto Sans Devanagari', 'Noto Sans Bengali', sans-serif;
 }
 
 /* Larger font size for Indian languages */
-.editor[lang="hi-IN"],
-.editor[lang="bn-IN"] {
+.editor-premium[lang="hi-IN"],
+.editor-premium[lang="bn-IN"] {
     font-size: 20px;
-    line-height: 2.4;
+    line-height: 2.2;
 }
 
 /* Language-specific color coding for typed text */
-.editor .lang-hi,
-.editor .lang-bn {
-    background-color: rgba(8, 145, 178, 0.08);
-    padding: 2px 4px;
-    border-radius: 3px;
-    transition: background-color 0.2s;
+.editor-premium .lang-hi,
+.editor-premium .lang-bn {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0.08) 100%);
+    padding: 2px 6px;
+    border-radius: 6px;
+    border-left: 3px solid rgba(59, 130, 246, 0.3);
+    transition: all 0.2s;
 }
 
-.editor .lang-hi:hover,
-.editor .lang-bn:hover {
-    background-color: rgba(8, 145, 178, 0.15);
+.editor-premium .lang-hi:hover,
+.editor-premium .lang-bn:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(59, 130, 246, 0.12) 100%);
 }
 
 /* Keep English/German/Spanish without background */
-.editor .lang-en,
-.editor .lang-de,
-.editor .lang-es {
+.editor-premium .lang-en,
+.editor-premium .lang-de,
+.editor-premium .lang-es {
     background-color: transparent;
 }
 
 /* Scrollbar Styling */
-.editor::-webkit-scrollbar {
-    width: 8px;
+.editor-premium::-webkit-scrollbar {
+    width: 10px;
 }
 
-.editor::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
+.editor-premium::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 8px;
 }
 
-.editor::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
+.editor-premium::-webkit-scrollbar-thumb {
+    background: var(--border-hover);
+    border-radius: 8px;
+    border: 2px solid var(--bg-secondary);
 }
 
-.editor::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+.editor-premium::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
 }
 
 /* Interim text preview (while speaking) */
 .interim-preview {
     position: fixed;
-    bottom: 30px;
+    bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(8, 145, 178, 0.95);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.95) 0%, rgba(37, 99, 235, 0.95) 100%);
     color: white;
-    padding: 15px 25px;
-    border-radius: 10px;
+    padding: 16px 24px;
+    border-radius: 16px;
     font-size: 16px;
     font-style: italic;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-xl);
     z-index: 1000;
     max-width: 80%;
-    animation: slideUp 0.3s ease-out;
+    animation: slideUpPreview 0.3s ease-out;
     backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-weight: 500;
 }
 
 .interim-preview::before {
     content: '🎤 ';
     margin-right: 8px;
+    font-size: 18px;
 }
 
-@keyframes slideUp {
+@keyframes slideUpPreview {
     from {
         transform: translateX(-50%) translateY(20px);
         opacity: 0;
@@ -141,24 +152,61 @@
 }
 
 /* Animation for new text */
-@keyframes fadeIn {
+@keyframes fadeInText {
     from {
         opacity: 0;
+        transform: translateY(2px);
     }
     to {
         opacity: 1;
+        transform: translateY(0);
     }
 }
 
-.editor .new-text {
-    animation: fadeIn 0.3s ease-in;
+.editor-premium .new-text {
+    animation: fadeInText 0.3s ease-in;
 }
 
 /* Converted text with dotted underline */
 .converted-text {
     text-decoration: underline;
     text-decoration-style: dotted;
-    text-decoration-color: #06b6d4;
+    text-decoration-color: var(--accent);
     text-decoration-thickness: 2px;
-    text-underline-offset: 3px;
+    text-underline-offset: 4px;
+    background: rgba(59, 130, 246, 0.05);
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.converted-text:hover {
+    background: rgba(59, 130, 246, 0.1);
+}
+
+/* Selection styling */
+.editor-premium::selection {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--text-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .editor-premium-container {
+        padding: 16px;
+        min-height: 400px;
+    }
+
+    .editor-premium {
+        padding: 20px;
+        font-size: 16px;
+        min-height: 350px;
+    }
+
+    .interim-preview {
+        bottom: 20px;
+        padding: 12px 16px;
+        font-size: 14px;
+        max-width: 90%;
+    }
 }

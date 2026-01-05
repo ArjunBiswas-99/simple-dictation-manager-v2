@@ -3,159 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Dictation Manager</title>
+    <title>VoiceScript Pro - Professional Speech-to-Text</title>
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <!-- Google Fonts for better Indian language support -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/toolbar.css">
     <link rel="stylesheet" href="styles/editor.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <h1>Simple Dictation Manager</h1>
-            <div class="status-indicator">
-                <span id="statusText">Ready</span>
-                <span id="statusDot" class="status-dot"></span>
+    <div class="app-container">
+        <!-- Premium Header -->
+        <header class="header-premium">
+            <div class="header-left">
+                <div class="logo-container">
+                    <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16 8v16M12 12h8M12 20h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <div class="logo-text">
+                        <h1>VoiceScript Pro</h1>
+                        <span class="tagline">Professional Speech-to-Text</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="status-badge">
+                    <span id="statusText">Ready</span>
+                    <span id="statusDot" class="status-dot-premium"></span>
+                </div>
             </div>
         </header>
 
-        <!-- Toolbar -->
-        <div class="toolbar">
-            <!-- Mode Selector -->
-            <div class="toolbar-section">
-                <label for="modeSelect">Mode:</label>
-                <select id="modeSelect" class="mode-select">
-                    <option value="dictate">🎤 Dictate</option>
-                    <option value="type">⌨️ Type</option>
-                </select>
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <!-- Mode & Language Section -->
+                <div class="control-group">
+                    <div class="control-item">
+                        <label class="control-label">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 2a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-1 0v-11A.5.5 0 0 1 8 2z"/>
+                                <path d="M4 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 4z"/>
+                            </svg>
+                            Mode
+                        </label>
+                        <select id="modeSelect" class="control-select">
+                            <option value="dictate">🎤 Dictation</option>
+                            <option value="type">⌨️ Typing</option>
+                        </select>
+                    </div>
+
+                    <div class="control-item">
+                        <label class="control-label">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM4.5 7.5a.5.5 0 0 1 0-1h5.793l-2.147-2.146a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 7.5H4.5z"/>
+                            </svg>
+                            Language
+                        </label>
+                        <select id="languageSelect" class="control-select">
+                            <option value="en-US">English (US)</option>
+                            <option value="hi-IN">Hindi (हिन्दी)</option>
+                            <option value="bn-IN">Bengali (বাংলা)</option>
+                            <option value="de-DE">German (Deutsch)</option>
+                            <option value="es-ES">Spanish (Español)</option>
+                        </select>
+                    </div>
+
+                    <!-- Typing Language (hidden by default) -->
+                    <div class="control-item" id="typingLanguageSection" style="display: none;">
+                        <label class="control-label">Typing Language</label>
+                        <select id="typingLanguageSelect" class="control-select">
+                            <option value="en">English</option>
+                            <option value="hi">Hindi (transliteration)</option>
+                            <option value="bn">Bengali (transliteration)</option>
+                            <option value="de">German</option>
+                            <option value="es">Spanish</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button id="startBtn" class="btn-premium btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 13A6 6 0 1 1 8 2a6 6 0 0 1 0 12z"/>
+                            <path d="M11 8a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1 0-1h5A.5.5 0 0 1 11 8z"/>
+                        </svg>
+                        Start Dictation
+                    </button>
+                    <button id="stopBtn" class="btn-premium btn-secondary" disabled>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <rect x="5" y="5" width="6" height="6" rx="1"/>
+                        </svg>
+                        Stop
+                    </button>
+                    <button id="convertButton" class="btn-premium btn-accent" style="display: none;">
+                        <span id="convertButtonText">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 13A6 6 0 1 1 8 2a6 6 0 0 1 0 12z"/>
+                            </svg>
+                            Convert
+                        </span>
+                        <span id="convertButtonSpinner" class="spinner" style="display: none;">Converting...</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Language Selector -->
-            <div class="toolbar-section">
-                <label for="languageSelect">Language:</label>
-                <select id="languageSelect" class="language-select">
-                    <option value="en-US">English (US)</option>
-                    <option value="hi-IN">Hindi (हिन्दी)</option>
-                    <option value="bn-IN">Bengali (বাংলা)</option>
-                    <option value="de-DE">German (Deutsch)</option>
-                    <option value="es-ES">Spanish (Español)</option>
-                </select>
+            <!-- Formatting Toolbar -->
+            <div class="formatting-toolbar">
+                <div class="toolbar-section-premium">
+                    <span class="section-label">Format:</span>
+                    <button id="boldBtn" class="btn-format-premium" title="Bold (Ctrl+B)">
+                        <strong>B</strong>
+                    </button>
+                    <button id="italicBtn" class="btn-format-premium" title="Italic (Ctrl+I)">
+                        <em>I</em>
+                    </button>
+                    <button id="underlineBtn" class="btn-format-premium" title="Underline (Ctrl+U)">
+                        <u>U</u>
+                    </button>
+                </div>
+
+                <div class="toolbar-divider"></div>
+
+                <div class="toolbar-section-premium">
+                    <span class="section-label">Quick Insert:</span>
+                    <button id="insertQuotesBtn" class="btn-helper-premium" title='Wrap with double quotes "text"'>" "</button>
+                    <button id="insertSingleQuotesBtn" class="btn-helper-premium" title="Wrap with single quotes 'text'">&#39; &#39;</button>
+                    <button id="insertParenthesesBtn" class="btn-helper-premium" title="Wrap with parentheses (text)">( )</button>
+                    <button id="insertEmDashBtn" class="btn-helper-premium" title="Insert em dash —">—</button>
+                    <button id="insertEllipsisBtn" class="btn-helper-premium" title="Insert ellipsis ...">...</button>
+                    <button id="insertBulletBtn" class="btn-helper-premium" title="Insert bullet point • or toggle list">•</button>
+                </div>
+
+                <div class="toolbar-divider"></div>
+
+                <div class="toolbar-section-premium">
+                    <button id="clearBtn" class="btn-action-premium btn-danger" title="Clear All">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                        </svg>
+                        Clear
+                    </button>
+                    <button id="copyBtn" class="btn-action-premium" title="Copy to Clipboard">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                            <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                        </svg>
+                        Copy
+                    </button>
+                </div>
             </div>
 
-            <!-- Typing Language Selector (hidden by default) -->
-            <div class="toolbar-section" id="typingLanguageSection" style="display: none;">
-                <label for="typingLanguageSelect">Typing:</label>
-                <select id="typingLanguageSelect" class="language-select">
-                    <option value="en">English</option>
-                    <option value="hi">Hindi (transliteration)</option>
-                    <option value="bn">Bengali (transliteration)</option>
-                    <option value="de">German</option>
-                    <option value="es">Spanish</option>
-                </select>
+            <!-- Editor Area -->
+            <div class="editor-premium-container">
+                <div id="editor" class="editor-premium" contenteditable="true" spellcheck="true"></div>
             </div>
 
-            <!-- Convert Button (hidden by default) -->
-            <div class="toolbar-section" id="convertButtonSection" style="display: none;">
-                <button id="convertButton" class="convert-button" title="Convert selected text (Ctrl+T)">
-                    <span id="convertButtonText">🔄 Convert</span>
-                    <span id="convertButtonSpinner" class="spinner" style="display: none;">⏳ Converting...</span>
-                </button>
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                    <span class="stat-value" id="wordCount">0</span>
+                    <span class="stat-label">words</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                    </svg>
+                    <span class="stat-value" id="charCount">0</span>
+                    <span class="stat-label">characters</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                    </svg>
+                    <span class="stat-label">Language:</span>
+                    <span class="stat-value" id="currentLang">English</span>
+                </div>
             </div>
-
-            <!-- Control Buttons -->
-            <div class="toolbar-section">
-                <button id="startBtn" class="btn btn-primary">
-                    <span class="btn-icon">🎤</span> Start Dictation
-                </button>
-                <button id="stopBtn" class="btn btn-secondary" disabled>
-                    <span class="btn-icon">⏸</span> Stop
-                </button>
-            </div>
-
-            <!-- Formatting Buttons -->
-            <div class="toolbar-section">
-                <button id="boldBtn" class="btn btn-format" title="Bold (Ctrl+B)">
-                    <strong>B</strong>
-                </button>
-                <button id="italicBtn" class="btn btn-format" title="Italic (Ctrl+I)">
-                    <em>I</em>
-                </button>
-                <button id="underlineBtn" class="btn btn-format" title="Underline (Ctrl+U)">
-                    <u>U</u>
-                </button>
-            </div>
-
-            <!-- Utility Buttons -->
-            <div class="toolbar-section">
-                <button id="clearBtn" class="btn btn-danger" title="Clear All">
-                    <span class="btn-icon">🗑</span> Clear
-                </button>
-                <button id="copyBtn" class="btn btn-secondary" title="Copy to Clipboard">
-                    <span class="btn-icon">📋</span> Copy
-                </button>
-            </div>
-        </div>
-
-        <!-- Quick Insert Toolbar -->
-        <div class="quick-insert-toolbar">
-            <div class="toolbar-section">
-                <label>Quick Insert:</label>
-                <button id="insertQuotesBtn" class="btn btn-helper" title='Wrap with double quotes "text"'>
-                    " "
-                </button>
-                <button id="insertSingleQuotesBtn" class="btn btn-helper" title="Wrap with single quotes 'text'">
-                    ' '
-                </button>
-                <button id="insertParenthesesBtn" class="btn btn-helper" title="Wrap with parentheses (text)">
-                    ( )
-                </button>
-                <button id="insertEmDashBtn" class="btn btn-helper" title="Insert em dash —">
-                    —
-                </button>
-                <button id="insertEllipsisBtn" class="btn btn-helper" title="Insert ellipsis ...">
-                    ...
-                </button>
-                <button id="insertBulletBtn" class="btn btn-helper" title="Insert bullet point • or toggle list">
-                    •
-                </button>
-            </div>
-        </div>
-
-        <!-- Editor Area -->
-        <div class="editor-container">
-            <div id="editor" class="editor" contenteditable="true" spellcheck="true"></div>
-        </div>
-
-        <!-- Info Panel -->
-        <div class="info-panel">
-            <div class="info-item">
-                <span class="info-label">Words:</span>
-                <span id="wordCount">0</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Characters:</span>
-                <span id="charCount">0</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Current Language:</span>
-                <span id="currentLang">English</span>
-            </div>
-        </div>
-
-        <!-- Help Section -->
-        <div class="help-section">
-            <h3>Voice Commands</h3>
-            <ul>
-                <li><strong>Punctuation:</strong> "comma", "period", "question mark", "exclamation mark"</li>
-                <li><strong>Navigation:</strong> "new line", "new paragraph"</li>
-                <li><strong>Editing:</strong> "delete that" (removes last sentence)</li>
-            </ul>
         </div>
     </div>
 
