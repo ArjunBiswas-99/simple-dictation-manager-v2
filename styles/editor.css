@@ -1,9 +1,9 @@
-/* Premium Editor Styles */
+/* Warm Amber Editor Styles */
 
 .editor-premium-container {
     min-height: 600px;
     padding: 32px;
-    background: var(--bg-primary);
+    background: white;
 }
 
 .editor-premium {
@@ -11,21 +11,21 @@
     max-height: 700px;
     overflow-y: auto;
     padding: 32px;
-    border: 1px solid var(--border);
+    border: 2px solid var(--border);
     border-radius: 16px;
     font-size: 18px;
     line-height: 2;
     color: var(--text-primary);
-    background: var(--bg-primary);
+    background: var(--bg-card);
     outline: none;
     transition: all 0.3s;
-    box-shadow: var(--shadow-sm);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .editor-premium:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1), var(--shadow-md);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .editor-premium:empty:before {
@@ -49,48 +49,12 @@
 
 .editor-premium u {
     text-decoration: underline;
-    text-decoration-color: var(--accent);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 3px;
 }
 
-.editor-premium p {
-    margin-bottom: 16px;
-}
-
-/* Multi-language Support */
-.editor-premium {
-    /* Support for various scripts */
-    font-family: 'Inter', 'Noto Sans', 'Noto Sans Devanagari', 'Noto Sans Bengali', sans-serif;
-}
-
-/* Larger font size for Indian languages */
-.editor-premium[lang="hi-IN"],
-.editor-premium[lang="bn-IN"] {
-    font-size: 20px;
-    line-height: 2.2;
-}
-
-/* Language-specific color coding for typed text */
-.editor-premium .lang-hi,
-.editor-premium .lang-bn {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0.08) 100%);
-    padding: 2px 6px;
-    border-radius: 6px;
-    border-left: 3px solid rgba(59, 130, 246, 0.3);
-    transition: all 0.2s;
-}
-
-.editor-premium .lang-hi:hover,
-.editor-premium .lang-bn:hover {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(59, 130, 246, 0.12) 100%);
-}
-
-/* Keep English/German/Spanish without background */
-.editor-premium .lang-en,
-.editor-premium .lang-de,
-.editor-premium .lang-es {
-    background-color: transparent;
+/* Selection Highlighting */
+.editor-premium::selection {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
 }
 
 /* Scrollbar Styling */
@@ -104,109 +68,140 @@
 }
 
 .editor-premium::-webkit-scrollbar-thumb {
-    background: var(--border-hover);
+    background: var(--border);
     border-radius: 8px;
     border: 2px solid var(--bg-secondary);
 }
 
 .editor-premium::-webkit-scrollbar-thumb:hover {
-    background: var(--text-secondary);
+    background: var(--border-hover);
 }
 
-/* Interim text preview (while speaking) */
-.interim-preview {
-    position: fixed;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.95) 0%, rgba(37, 99, 235, 0.95) 100%);
-    color: white;
-    padding: 16px 24px;
-    border-radius: 16px;
-    font-size: 16px;
-    font-style: italic;
-    box-shadow: var(--shadow-xl);
-    z-index: 1000;
-    max-width: 80%;
-    animation: slideUpPreview 0.3s ease-out;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    font-weight: 500;
+/* Hindi and Bengali Text Styling */
+.editor-premium [lang="hi"],
+.editor-premium [lang="bn"] {
+    font-family: 'Noto Sans Devanagari', 'Noto Sans Bengali', 'Inter', sans-serif;
+    font-size: 19px;
+    line-height: 2.2;
 }
 
-.interim-preview::before {
-    content: '🎤 ';
-    margin-right: 8px;
-    font-size: 18px;
+/* Bullet Lists */
+.editor-premium ul {
+    list-style-type: disc;
+    padding-left: 32px;
+    margin: 16px 0;
 }
 
-@keyframes slideUpPreview {
-    from {
-        transform: translateX(-50%) translateY(20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(-50%) translateY(0);
-        opacity: 1;
-    }
+.editor-premium li {
+    margin: 8px 0;
 }
 
-/* Animation for new text */
-@keyframes fadeInText {
-    from {
-        opacity: 0;
-        transform: translateY(2px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Paragraphs */
+.editor-premium p {
+    margin: 12px 0;
 }
 
-.editor-premium .new-text {
-    animation: fadeInText 0.3s ease-in;
+.editor-premium br {
+    display: block;
+    content: "";
+    margin: 8px 0;
 }
 
-/* Converted text with dotted underline */
-.converted-text {
+/* Link Styling */
+.editor-premium a {
+    color: var(--primary);
     text-decoration: underline;
-    text-decoration-style: dotted;
-    text-decoration-color: var(--accent);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 4px;
-    background: rgba(59, 130, 246, 0.05);
-    padding: 2px 4px;
+}
+
+.editor-premium a:hover {
+    color: var(--primary-light);
+}
+
+/* Code Blocks (if needed) */
+.editor-premium code {
+    background: var(--bg-secondary);
+    padding: 2px 6px;
     border-radius: 4px;
-    transition: all 0.2s;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
 }
 
-.converted-text:hover {
-    background: rgba(59, 130, 246, 0.1);
+.editor-premium pre {
+    background: var(--bg-secondary);
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 2px solid var(--border);
 }
 
-/* Selection styling */
-.editor-premium::selection {
-    background: rgba(59, 130, 246, 0.2);
-    color: var(--text-primary);
+.editor-premium pre code {
+    background: none;
+    padding: 0;
+}
+
+/* Blockquotes */
+.editor-premium blockquote {
+    border-left: 4px solid var(--primary);
+    padding-left: 16px;
+    margin: 16px 0;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Tables (if needed) */
+.editor-premium table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 16px 0;
+}
+
+.editor-premium th,
+.editor-premium td {
+    border: 2px solid var(--border);
+    padding: 12px;
+    text-align: left;
+}
+
+.editor-premium th {
+    background: var(--bg-secondary);
+    font-weight: 600;
+}
+
+.editor-premium tr:hover {
+    background: var(--bg-primary);
+}
+
+/* Focus Mode - Reduced Distractions */
+.editor-premium.focus-mode {
+    max-height: none;
+    min-height: 80vh;
+}
+
+/* Print Styles */
+@media print {
+    .editor-premium {
+        border: none;
+        box-shadow: none;
+        background: white;
+        padding: 0;
+    }
 }
 
 /* Responsive */
 @media (max-width: 768px) {
     .editor-premium-container {
-        padding: 16px;
-        min-height: 400px;
+        padding: 20px;
     }
 
     .editor-premium {
         padding: 20px;
         font-size: 16px;
-        min-height: 350px;
+        line-height: 1.8;
     }
 
-    .interim-preview {
-        bottom: 20px;
-        padding: 12px 16px;
-        font-size: 14px;
-        max-width: 90%;
+    .editor-premium [lang="hi"],
+    .editor-premium [lang="bn"] {
+        font-size: 17px;
+        line-height: 2;
     }
 }

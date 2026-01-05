@@ -464,7 +464,11 @@ class DictationApp {
         console.log('[App] Switching mode to:', mode);
         this.currentMode = mode;
 
-        const dictationLangSelect = document.getElementById('language-select');
+        const dictationLangSection = document.getElementById('dictationLanguageSection');
+        const typingSection = document.getElementById('typingLanguageSection');
+        const convertButton = document.getElementById('convertButton');
+        const startButton = document.getElementById('startBtn');
+        const stopButton = document.getElementById('stopBtn');
 
         if (mode === 'type') {
             // Stop dictation if active
@@ -473,10 +477,20 @@ class DictationApp {
                 this.stopDictation();
             }
 
-            // Disable dictation language dropdown
-            if (dictationLangSelect) {
-                dictationLangSelect.disabled = true;
-                console.log('[App] Dictation language dropdown disabled');
+            // Hide dictation language section
+            if (dictationLangSection) {
+                dictationLangSection.style.display = 'none';
+                console.log('[App] Dictation language section hidden');
+            }
+
+            // Hide dictation buttons
+            if (startButton) {
+                startButton.style.display = 'none';
+                console.log('[App] Start button hidden');
+            }
+            if (stopButton) {
+                stopButton.style.display = 'none';
+                console.log('[App] Stop button hidden');
             }
 
             // Enable typing mode
@@ -484,21 +498,18 @@ class DictationApp {
             this.typingMode.enable();
 
             // Show typing language selector
-            const typingSection = document.getElementById('typingLanguageSection');
             if (typingSection) {
                 typingSection.style.display = 'flex';
                 console.log('[App] Typing language selector shown');
             }
 
             // Show convert button
-            const convertSection = document.getElementById('convertButtonSection');
-            if (convertSection) {
-                convertSection.style.display = 'flex';
+            if (convertButton) {
+                convertButton.style.display = 'inline-flex';
                 console.log('[App] Convert button shown');
             }
 
             // Update UI
-            this.ui.setStartButtonEnabled(false);
             this.ui.updateStatus('Typing mode - Select text and click Convert', 'ready');
             this.ui.showNotification('Typing mode enabled. Select text and click Convert to transliterate.', 'info');
             console.log('[App] Typing mode fully enabled');
@@ -506,25 +517,33 @@ class DictationApp {
         } else {
             console.log('[App] Switching to dictate mode');
             
-            // Enable dictation language dropdown
-            if (dictationLangSelect) {
-                dictationLangSelect.disabled = false;
-                console.log('[App] Dictation language dropdown enabled');
+            // Show dictation language section
+            if (dictationLangSection) {
+                dictationLangSection.style.display = 'flex';
+                console.log('[App] Dictation language section shown');
+            }
+
+            // Show dictation buttons
+            if (startButton) {
+                startButton.style.display = 'inline-flex';
+                console.log('[App] Start button shown');
+            }
+            if (stopButton) {
+                stopButton.style.display = 'inline-flex';
+                console.log('[App] Stop button shown');
             }
 
             // Disable typing mode
             this.typingMode.disable();
 
             // Hide typing language selector
-            const typingSection = document.getElementById('typingLanguageSection');
             if (typingSection) {
                 typingSection.style.display = 'none';
             }
 
             // Hide convert button
-            const convertSection = document.getElementById('convertButtonSection');
-            if (convertSection) {
-                convertSection.style.display = 'none';
+            if (convertButton) {
+                convertButton.style.display = 'none';
                 console.log('[App] Convert button hidden');
             }
 

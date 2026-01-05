@@ -1,9 +1,9 @@
-/* Premium Formatting Toolbar Styles */
+/* Warm Amber Toolbar Styles */
 
 .formatting-toolbar {
     padding: 16px 32px;
     background: var(--bg-primary);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 2px solid var(--border);
     display: flex;
     align-items: center;
     gap: 20px;
@@ -36,8 +36,8 @@
     width: 38px;
     height: 38px;
     padding: 0;
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
+    background: white;
+    border: 2px solid var(--border);
     border-radius: 8px;
     color: var(--text-primary);
     font-size: 16px;
@@ -52,15 +52,16 @@
 
 .btn-format-premium:hover {
     background: var(--bg-secondary);
-    border-color: var(--accent);
-    color: var(--accent);
-    transform: translateY(-1px);
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: scale(1.05);
 }
 
 .btn-format-premium.active {
-    background: var(--accent);
-    border-color: var(--accent);
+    background: var(--primary);
+    border-color: var(--primary);
     color: white;
+    box-shadow: var(--shadow-md);
 }
 
 /* Helper Buttons */
@@ -68,8 +69,8 @@
     min-width: 44px;
     height: 38px;
     padding: 0 12px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
+    background: white;
+    border: 2px solid var(--border);
     border-radius: 8px;
     color: var(--text-primary);
     font-size: 16px;
@@ -83,15 +84,14 @@
 }
 
 .btn-helper-premium:hover {
-    background: rgba(59, 130, 246, 0.1);
+    background: var(--bg-secondary);
     border-color: var(--accent);
     color: var(--accent);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
+    transform: scale(1.05);
 }
 
 .btn-helper-premium:active {
-    transform: translateY(0);
+    transform: scale(0.98);
 }
 
 /* Action Buttons */
@@ -106,10 +106,8 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
-    font-family: inherit;
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    border: 1px solid var(--border);
+    background: var(--primary);
+    color: white;
 }
 
 .btn-action-premium svg {
@@ -118,8 +116,7 @@
 }
 
 .btn-action-premium:hover {
-    background: var(--bg-tertiary);
-    border-color: var(--border-hover);
+    background: var(--primary-light);
     transform: translateY(-1px);
 }
 
@@ -127,42 +124,45 @@
     transform: translateY(0);
 }
 
-.btn-action-premium.btn-danger {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--danger);
-    border-color: rgba(239, 68, 68, 0.2);
+.btn-action-premium:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-.btn-action-premium.btn-danger:hover {
-    background: rgba(239, 68, 68, 0.2);
+/* Clear Button Specific */
+.btn-clear {
+    background: white;
+    color: var(--danger);
+    border: 2px solid var(--border);
+}
+
+.btn-clear:hover {
+    background: #FEE2E2;
     border-color: var(--danger);
 }
 
-/* Spinner Animation */
+/* Copy Button Specific */
+.btn-copy {
+    background: var(--success);
+}
+
+.btn-copy:hover {
+    background: #047857;
+}
+
+/* Spinner */
 .spinner {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    animation: pulse-text 1s ease-in-out infinite;
+    animation: spin 1s linear infinite;
 }
 
-@keyframes pulse-text {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .formatting-toolbar {
-        padding: 12px 16px;
-        gap: 12px;
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
     }
-
-    .toolbar-section-premium {
-        flex-wrap: wrap;
-    }
-
-    .toolbar-divider {
-        display: none;
+    100% {
+        transform: rotate(360deg);
     }
 }
