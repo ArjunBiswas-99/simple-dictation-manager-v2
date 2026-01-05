@@ -98,6 +98,24 @@
     box-shadow: 0 2px 4px rgba(8, 145, 178, 0.2);
 }
 
+.convert-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.convert-button .spinner {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
 /* Responsive Toolbar */
 @media (max-width: 768px) {
     .toolbar {

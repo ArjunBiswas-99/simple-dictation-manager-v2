@@ -109,6 +109,9 @@ export class TypingMode {
         console.log('[TypingMode] Converting selected text:', selectedText);
         console.log('[TypingMode] Original HTML:', tempDiv.innerHTML);
 
+        // Show loading indicator
+        this.showConvertLoading(true);
+
         try {
             // Split by line breaks (both <br> and text nodes)
             const lines = this.extractLines(tempDiv);
@@ -148,6 +151,25 @@ export class TypingMode {
         } catch (error) {
             console.error('[TypingMode] Conversion error:', error);
             alert('Conversion failed. Please try again.');
+        } finally {
+            // Hide loading indicator
+            this.showConvertLoading(false);
+        }
+    }
+
+    /**
+     * Show or hide loading indicator on Convert button
+     * @param {boolean} isLoading - Whether to show loading state
+     */
+    showConvertLoading(isLoading) {
+        const button = document.getElementById('convertButton');
+        const buttonText = document.getElementById('convertButtonText');
+        const spinner = document.getElementById('convertButtonSpinner');
+        
+        if (button && buttonText && spinner) {
+            button.disabled = isLoading;
+            buttonText.style.display = isLoading ? 'none' : 'inline';
+            spinner.style.display = isLoading ? 'inline' : 'none';
         }
     }
 
