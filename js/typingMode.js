@@ -144,19 +144,19 @@ export class TypingMode {
             range.deleteContents();
             range.insertNode(container);
             
-            // Unwrap: move children out of container and remove container
+            // Unwrap: move children out of container and track last node
             const parent = container.parentNode;
-            const lastNode = container.lastChild;
+            let lastInsertedNode = null;
             
             while (container.firstChild) {
-                parent.insertBefore(container.firstChild, container);
+                lastInsertedNode = parent.insertBefore(container.firstChild, container);
             }
             parent.removeChild(container);
             
             // Move cursor after the last inserted node
-            if (lastNode && lastNode.parentNode) {
-                range.setStartAfter(lastNode);
-                range.setEndAfter(lastNode);
+            if (lastInsertedNode) {
+                range.setStartAfter(lastInsertedNode);
+                range.setEndAfter(lastInsertedNode);
                 selection.removeAllRanges();
                 selection.addRange(range);
             }
