@@ -80,6 +80,7 @@ export class TypingMode {
 
     /**
      * Convert selected text using transliteration
+     * Preserves line breaks and paragraph structure
      */
     async convertSelectedText() {
         const editor = document.getElementById('editor');
@@ -91,46 +92,136 @@ export class TypingMode {
         }
 
         const range = selection.getRangeAt(0);
+        
+        // Extract the HTML content to preserve structure
+        const fragment = range.cloneContents();
+        const tempDiv = document.createElement('div');
+        tempDiv.appendChild(fragment);
+        
+        // Get plain text for checking
         const selectedText = range.toString();
-
+        
         if (!selectedText.trim()) {
             alert('Please select text to convert');
             return;
         }
 
         console.log('[TypingMode] Converting selected text:', selectedText);
+        console.log('[TypingMode] Original HTML:', tempDiv.innerHTML);
 
         try {
-            const transliterated = await this.transliteration.transliterate(
-                selectedText,
-                this.currentLanguage
-            );
-
-            console.log('[TypingMode] Transliteration result:', transliterated);
-
-            if (transliterated && transliterated !== selectedText) {
-                // Create a span with dotted underline for the converted text
-                const span = document.createElement('span');
-                span.className = 'converted-text';
-                span.textContent = transliterated;
-                
-                // Replace the selection with the span
-                range.deleteContents();
-                range.insertNode(span);
-                
-                // Move cursor after the span
-                range.setStartAfter(span);
-                range.setEndAfter(span);
-                selection.removeAllRanges();
-                selection.addRange(range);
-                
-                console.log('[TypingMode] Text converted and underlined');
+            // Split by line breaks (both <br> and text nodes)
+            const lines = this.extractLines(tempDiv);
+            console.log('[TypingMode] Extracted lines:', lines);
+            
+            // Transliterate each line separately
+            const transliteratedLines = [];
+            for (const line of lines) {
+                if (line.trim()) {
+                    const transliterated = await this.transliteration.transliterate(
+                        line,
+                        this.currentLanguage
+                    );
+                    transliteratedLines.push(transliterated);
+                } else {
+                    transliteratedLines.push(line); // Preserve empty lines
+                }
             }
+            
+            console.log('[TypingMode] Transliterated lines:', transliteratedLines);
+
+            // Reconstruct with original structure
+            const resultFragment = this.reconstructStructure(transliteratedLines, tempDiv);
+            
+            // Replace the selection with the new fragment
+            range.deleteContents();
+            range.insertNode(resultFragment);
+            
+            // Move cursor after the inserted content
+            range.setStartAfter(resultFragment.lastChild || resultFragment);
+            range.setEndAfter(resultFragment.lastChild || resultFragment);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            console.log('[TypingMode] Text converted with structure preserved');
 
         } catch (error) {
             console.error('[TypingMode] Conversion error:', error);
             alert('Conversion failed. Please try again.');
         }
+    }
+
+    /**
+     * Extract lines from HTML content, preserving structure
+     * @param {HTMLElement} element - Element containing the text
+     * @returns {Array} Array of text lines
+     */
+    extractLines(element) {
+        const lines = [];
+        const walker = document.createTreeWalker(
+            element,
+            NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT,
+            null,
+            false
+        );
+        
+        let currentLine = '';
+        let node;
+        
+        while (node = walker.nextNode()) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                currentLine += node.textContent;
+            } else if (node.nodeName === 'BR' || node.nodeName === 'DIV' || node.nodeName === 'P') {
+                if (currentLine || lines.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = '';
+                }
+            }
+        }
+        
+        // Add the last line
+        if (currentLine) {
+            lines.push(currentLine);
+        }
+        
+        return lines;
+    }
+
+    /**
+     * Reconstruct HTML structure with transliterated text
+     * @param {Array} lines - Array of transliterated lines
+     * @param {HTMLElement} originalElement - Original element for structure reference
+     * @returns {DocumentFragment} Fragment with reconstructed content
+     */
+    reconstructStructure(lines, originalElement) {
+        const fragment = document.createDocumentFragment();
+        
+        // Check if original had line breaks
+        const hasBR = originalElement.querySelector('br') !== null;
+        const hasBlocks = originalElement.querySelector('div, p') !== null;
+        
+        lines.forEach((line, index) => {
+            // Create span with converted-text class
+            const span = document.createElement('span');
+            span.className = 'converted-text';
+            span.textContent = line;
+            fragment.appendChild(span);
+            
+            // Add line break between lines (except last)
+            if (index < lines.length - 1) {
+                if (hasBlocks) {
+                    // Use div for block-level separation
+                    const br = document.createElement('br');
+                    fragment.appendChild(br);
+                } else if (hasBR || lines.length > 1) {
+                    // Use br for inline separation
+                    const br = document.createElement('br');
+                    fragment.appendChild(br);
+                }
+            }
+        });
+        
+        return fragment;
     }
 
     /**
