@@ -136,23 +136,30 @@ export class TypingMode {
             // Reconstruct with original structure
             const resultFragment = this.reconstructStructure(transliteratedLines, tempDiv);
             
-            // Get reference to last child before inserting (fragment will be consumed)
-            const lastChild = resultFragment.lastChild;
+            // Wrap fragment in a temporary container to track insertion point
+            const container = document.createElement('span');
+            container.appendChild(resultFragment);
             
-            // Replace the selection with the new fragment
+            // Replace the selection with the container
             range.deleteContents();
-            range.insertNode(resultFragment);
+            range.insertNode(container);
             
-            // Move cursor after the inserted content
-            if (lastChild && lastChild.parentNode) {
-                range.setStartAfter(lastChild);
-                range.setEndAfter(lastChild);
-            } else {
-                // Fallback: collapse at the end of the range
-                range.collapse(false);
+            // Unwrap: move children out of container and remove container
+            const parent = container.parentNode;
+            const lastNode = container.lastChild;
+            
+            while (container.firstChild) {
+                parent.insertBefore(container.firstChild, container);
             }
-            selection.removeAllRanges();
-            selection.addRange(range);
+            parent.removeChild(container);
+            
+            // Move cursor after the last inserted node
+            if (lastNode && lastNode.parentNode) {
+                range.setStartAfter(lastNode);
+                range.setEndAfter(lastNode);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
             
             console.log('[TypingMode] Text converted with structure preserved');
 
