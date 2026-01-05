@@ -136,13 +136,21 @@ export class TypingMode {
             // Reconstruct with original structure
             const resultFragment = this.reconstructStructure(transliteratedLines, tempDiv);
             
+            // Get reference to last child before inserting (fragment will be consumed)
+            const lastChild = resultFragment.lastChild;
+            
             // Replace the selection with the new fragment
             range.deleteContents();
             range.insertNode(resultFragment);
             
             // Move cursor after the inserted content
-            range.setStartAfter(resultFragment.lastChild || resultFragment);
-            range.setEndAfter(resultFragment.lastChild || resultFragment);
+            if (lastChild && lastChild.parentNode) {
+                range.setStartAfter(lastChild);
+                range.setEndAfter(lastChild);
+            } else {
+                // Fallback: collapse at the end of the range
+                range.collapse(false);
+            }
             selection.removeAllRanges();
             selection.addRange(range);
             
